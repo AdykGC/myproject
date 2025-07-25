@@ -7,8 +7,8 @@ import About from './components/About.vue'
 
 
 <template>
+  <Header />
   <div id="app">
-    <Header />
     <router-view />
   </div>
   <div>

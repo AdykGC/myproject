@@ -8,6 +8,9 @@ const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/items', name: 'Items', component: Items },
   { path: '/about', name: 'About', component: About },
+  { path: '/about', name: 'About', component: About },
+  { path: '/about', name: 'About', component: About },
+  { path: '/about', name: 'About', component: About },
 ]
 
 const router = createRouter({
