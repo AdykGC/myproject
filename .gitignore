@@ -11,7 +11,6 @@ db.sqlite3
 venv
 # Environment variables
 .env
-<<<<<<< HEAD
 backend/.env
 frontend/.env
 
@@ -42,7 +41,6 @@ Thumbs.db
 # Frontend build
 **/dist/
 **/build/
-<<<<<<< HEAD
 frontend/.vite/deps/
 
 
