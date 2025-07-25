@@ -15,6 +15,12 @@ backend/.env
 frontend/.env
 
 
+# Python virtual environment
+**/venv/
+**/env/
+backend/.env
+frontend/.env
+
 
 # Node.js dependencies
 node_modules/
