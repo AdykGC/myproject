@@ -23,30 +23,6 @@ class ItemViewSet(viewsets.ModelViewSet):
 
 
 
-@api_view(['POST'])
-def ollama_message(request):
-    """
-    Обработчик POST-запроса к локальной LLM через Ollama.
-    Ожидает JSON с ключом 'message'.
-    Возвращает ответ модели в формате JSON.
-    """
-
-    user_message = request.data.get('message')
-    if not user_message:
-        return Response({'error': 'Message is required'}, status=400)
-    try:
-        response = ollama.chat(
-            model='gemma3:1b',
-            messages=[
-                {"role": "user", "content": user_message}
-            ]
-        )
-        reply = response['message']['content'].strip()
-        return Response({'reply': reply})
-    except Exception as e:
-        logger.error(f"Ошибка при запросе к Ollama: {e}")
-        return Response({'error': str(e)}, status=500)
-
 
 @api_view(['POST'])
 def openai_message(request):
