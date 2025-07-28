@@ -14,9 +14,13 @@ services:
         value: False
       - key: OPENAI_API_KEY
         sync: false
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.backend.settings
+      - key: PYTHON_VERSION
+        value: 3.10
     autoDeploy: true
 
-  - type: web
+  - type: static
     name: vue-frontend
     env: node
     plan: free
@@ -28,3 +32,4 @@ services:
     envVars:
       - key: VITE_API_URL
         sync: false
+    autoDeploy: true
