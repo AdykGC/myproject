@@ -71,7 +71,15 @@
 |                                              | npm install axios                            |                                              |
 | Создание .env                                | touch .env                                   | touch .env                                   |
 | Заполнение .env                              |                                              |                                              |
+| Создать миграции                             |                                              | python manage.py makemigrations              |
+| Применить миграции                           |                                              | python manage.py migrate                     |
 | Запуск серверов                              | npm run dev                                  | python3 manage.py runserver                  |
+
+3. Если вы хотите использовать локальную LLM Ollama
+
+- Установите Ollama с официального сайта: ```https://ollama.com/```
+- Установите LLM gemma3:1b`: ```ollama run gemma3:1b```
+- Запустите Ollama:
 
 # Пример .Env
 
