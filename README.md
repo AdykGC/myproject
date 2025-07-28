@@ -23,6 +23,7 @@
 `JavaScript`
 `Vue.js`
 `Vite`
+`Axios` 
 `CSS`
 `Web Speech API`
 
@@ -61,46 +62,32 @@
 
 ```cd myproject```
 
-3. Создание виртуального окружения
+| Запуск серверов                              | Frontend                                     | Backend                                      |
+|----------------------------------------------|----------------------------------------------|----------------------------------------------|
+| Перейти в папку                              | cd frontend                                  | cd backend                                   |
+| Создание виртуального окружения              |                                              | python3 -m venv venv                         |
+| Активация виртуального окружения             |                                              | source venv/bin/activate                     |
+| Установка зависимостей                       | npm install                                  | pip3 install -r requirements.txt             |
+|                                              | npm install axios                            |                                              |
+| Создание .env                                | touch .env                                   | touch .env                                   |
+| Заполнение .env                              |                                              |                                              |
+| Запуск серверов                              | npm run dev                                  | python3 manage.py runserver                  |
 
-```python3 -m venv venv```
+# Пример .Env
 
-4. Backend | Перейти в папку
+### Frontend
 
-```cd backend```
+| Key                                          | Value                                        | Info                                         |
+|----------------------------------------------|----------------------------------------------|----------------------------------------------|
+| VITE_API_URL                                 | 'URL_of_Django_Server/api'                   | Value                                        |
 
-4. Frontend | Перейти в папку
+### Backend
 
-```cd frontend```
+| Key                                          | Value                                        | Info                                         |
+|----------------------------------------------|----------------------------------------------|----------------------------------------------|
+| DJANGO_SECRET_KEY                            | 'SecretKeyGeneratedByTheInstruction'         | Value                                        |
+| DJANGO_DEBUG                                 | False                                        | Value                                        |
+| OPENAI_API_KEY                               | 'YourOpenAIAPI'                              | Value                                        |
 
-5. Frontend | Активация виртуального окружения
-
-```python3 -m venv venv```
-
-```source venv/bin/activate```
-
-5. Frontend | Активация виртуального окружения
-
-```python3 -m venv venv```
-
-```source venv/bin/activate```
-
-6. Backend | Установка зависимостей
-
-```pip3 install -r requirements.txt```
-
-6. Frontend | Установка зависимостей
-
-```npm install```
-
-7. Backend | Запуск сервера
-
-```python3 manage.py runserver```
-
-7.  Frontend | Запуск dev-сервер
-
-```npm run dev```
-
----
-
-# Структура проекта
+```python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'```
+DJANGO_SECRET_KEY=полученное_значение
