@@ -2,7 +2,6 @@
   <div class="col left">
     <label style="color: white; margin-top: 10px;">
       <select v-model="selectedModel" style="margin-left: 10px;">
-        <option value="ollama">🖥️ Ollama (локально)</option>
         <option value="openai">☁️ OpenAI (через API)</option>
       </select>
     </label>
@@ -111,7 +110,7 @@ export default {
       loading: false,
       recognizing: false,
       recognition: null,
-      selectedModel: 'ollama', // по умолчанию
+      selectedModel: 'openai', // по умолчанию
     };
   },
   mounted() {
@@ -164,7 +163,7 @@ export default {
 
       this.loading = true;
       console.log(`📤 Отправляем (${this.selectedModel}):`, this.message);
-      let url = 'http://localhost:8000/api/chat/ollama/';
+      let url = 'http://localhost:8000/api/chat/openai/';
       if (this.selectedModel === 'openai') {
         url = 'http://localhost:8000/api/chat/openai/';
       }

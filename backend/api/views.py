@@ -10,7 +10,6 @@ from rest_framework.response import Response
 # Logs, API
 import os
 import logging
-import ollama
 from openai import OpenAI
 
 
