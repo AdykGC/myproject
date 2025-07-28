@@ -8,11 +8,6 @@
     </header>
 </template>
 
-<script>
-export default {
-  name: "Header_1",
-};
-</script>
 
 <script setup>
 import NavLeft from './Header/nav-left.vue'
@@ -34,30 +29,10 @@ header {
 }
 /* Внутренний контейнер для центрирования контента внутри header */
 .header-container {
-    max-width: 1680px;
+    max-width: 1280px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.nav-left, .nav-center, .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-nav a, .icon-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #ffffff;
-}
-
-.icon-link:hover {
-    color: #007bff;
-    text-decoration: underline;
 }
 </style>

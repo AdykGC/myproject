@@ -3,145 +3,112 @@
     <div class="container">
       <div class="cta-box">
         <div class="row">
-          <div class="col left">
-            <h2 class="heading"><span>Hi there!</span></h2>
-            <h1 class="heading"><span>What would you like to know?</span></h1>
-            <h4 class="heading">
-              <span>Use one of the most common prompts below or ask your own question</span>
-            </h4>
-
-            <input
-              v-model="message"
-              type="text"
-              class="input"
-              placeholder="Type your question here..."
-            />
-            <p v-if="reply" class="reply">🤖 {{ reply }}</p>
-          </div>
-
-          <div class="col left">
-            <label style="color: white; margin-top: 10px;">
-              Choose model:
-              <select v-model="selectedModel" style="margin-left: 10px;">
-                <option value="ollama">🖥️ Ollama (локально)</option>
-                <option value="openai">☁️ OpenAI (через API)</option>
-              </select>
-            </label>
-            <button @click="askQuestion" :disabled="loading">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" viewBox="0 0 256 256">
-                <path d="M80,128V64a48,48,0,0,1,96,0v64a48,48,0,0,1-96,0Zm128,0a8,8,0,0,0-16,0,64,64,0,0,1-128,0,8,8,0,0,0-16,0,80.11,80.11,0,0,0,72,79.6V240a8,8,0,0,0,16,0V207.6A80.11,80.11,0,0,0,208,128Z"></path>
-              </svg>
-              {{ loading ? 'Asking...' : 'Ask whatever you want' }}
-              <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#fff" viewBox="0 0 256 256">
-                  <path d="M48,80v96a8,8,0,0,1-16,0V80a8,8,0,0,1,16,0Zm189.66,42.34-96-96A8,8,0,0,0,128,32V72H72a8,8,0,0,0-8,8v96a8,8,0,0,0,8,8h56v40a8,8,0,0,0,13.66,5.66l96-96A8,8,0,0,0,237.66,122.34Z"></path>
-                </svg>
-              </span>
-            </button>
-            <!-- Кнопка микрофона -->
-            <button @click="startRecognition" :disabled="recognizing" style="margin-top: 10px;">
-              🎤 {{ recognizing ? 'Listening...' : 'Speak' }}
-            </button>
-          </div>
+          <Part_1 />
+          <Part_2 />
         </div>
       </div>
     </div>
   </section>
 </template>
 
+<script setup>
+import Part_1 from './Section_Chat_AI/col-left-text.vue'
+import Part_2 from './Section_Chat_AI/col-left-IO.vue'
+</script>
+
 <script>
-export default {
-  data() {
-    return {
-      message: '',
-      reply: '',
-      loading: false,
-      recognizing: false,
-      recognition: null,
-      selectedModel: 'ollama', // по умолчанию
-    };
-  },
-  mounted() {
-  if ('webkitSpeechRecognition' in window) {
-    this.recognition = new webkitSpeechRecognition();
-    this.recognition.lang = 'ru-RU';
-    this.recognition.continuous = true;
-    this.recognition.interimResults = true;
-
-    this.recognition.onresult = (event) => {
-      let finalTranscript = '';
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          finalTranscript += event.results[i][0].transcript;
-        }
-      }
-      if (finalTranscript.trim() !== '') {
-        this.message = finalTranscript.trim();
-        this.recognizing = false;
-        this.recognition.stop(); // останавливаем распознавание
-        this.askQuestion();      // отправляем только финальный текст
-      }
-    };
-
-    // this.recognition.onspeechend = () => {
-    //  this.recognition.stop();
-    //  this.recognizing = false;
-    // };
-
-    this.recognition.onerror = (event) => {
-      console.error('Speech recognition error', event);
-      this.recognizing = false;
-      if (event.error === 'no-speech') {
-        alert('🎤 Ничего не услышано. Попробуйте сказать что-то вслух.');
-      } else {
-        alert(`⚠️ Ошибка распознавания: ${event.error}`);
-      }
-    };
-
-    this.recognition.onend = () => {
-      this.recognizing = false;
-    };
-  } else {
-    alert('Ваш браузер не поддерживает распознавание речи.');
-  }
-},
-  methods: {
-    async askQuestion() {
-      if (!this.message.trim()) return;
-
-      this.loading = true;
-      console.log(`📤 Отправляем (${this.selectedModel}):`, this.message);
-      let url = 'http://localhost:8000/api/chat/ollama/';
-      if (this.selectedModel === 'openai') {
-        url = 'http://localhost:8000/api/chat/openai/';
-      }
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: this.message }),
-        });
-        const data = await res.json();
-        this.reply = data.reply || '⚠️ No response received.';
-      } catch (error) {
-        this.reply = '⚠️ Error: ' + error.message;
-      } finally {
-        this.loading = false;
-      }
-    },
-    startRecognition() {
-      if (this.recognition) {
-        if (!this.recognizing) {
-          this.recognizing = true;
-          this.recognition.start();
-        } else {
-          this.recognizing = false;
-          this.recognition.stop();
-        }
-      }
-    },
-  },
-};
+//    export default {
+//      data() {
+//        return {
+//          message: '',
+//          reply: '',
+//          loading: false,
+//          recognizing: false,
+//          recognition: null,
+//          selectedModel: 'ollama', // по умолчанию
+//        };
+//      },
+//      mounted() {
+//      if ('webkitSpeechRecognition' in window) {
+//        this.recognition = new webkitSpeechRecognition();
+//        this.recognition.lang = 'ru-RU';
+//        this.recognition.continuous = true;
+//        this.recognition.interimResults = true;
+  //    
+//        this.recognition.onresult = (event) => {
+//          let finalTranscript = '';
+//          for (let i = event.resultIndex; i < event.results.length; ++i) {
+//            if (event.results[i].isFinal) {
+//              finalTranscript += event.results[i][0].transcript;
+//            }
+//          }
+//          if (finalTranscript.trim() !== '') {
+//            this.message = finalTranscript.trim();
+//            this.recognizing = false;
+//            this.recognition.stop(); // останавливаем распознавание
+//            this.askQuestion();      // отправляем только финальный текст
+//          }
+//        };
+  //    
+//        // this.recognition.onspeechend = () => {
+//        //  this.recognition.stop();
+//        //  this.recognizing = false;
+//        // };
+  //    
+//        this.recognition.onerror = (event) => {
+//          console.error('Speech recognition error', event);
+//          this.recognizing = false;
+//          if (event.error === 'no-speech') {
+//            alert('🎤 Ничего не услышано. Попробуйте сказать что-то вслух.');
+//          } else {
+//            alert(`⚠️ Ошибка распознавания: ${event.error}`);
+//          }
+//        };
+  //    
+//        this.recognition.onend = () => {
+//          this.recognizing = false;
+//        };
+//      } else {
+//        alert('Ваш браузер не поддерживает распознавание речи.');
+//      }
+//    },
+//      methods: {
+//        async askQuestion() {
+//          if (!this.message.trim()) return;
+    //    
+//          this.loading = true;
+//          console.log(`📤 Отправляем (${this.selectedModel}):`, this.message);
+//          let url = 'http://localhost:8000/api/chat/ollama/';
+//          if (this.selectedModel === 'openai') {
+//            url = 'http://localhost:8000/api/chat/openai/';
+//          }
+//          try {
+//            const res = await fetch(url, {
+//              method: 'POST',
+//              headers: { 'Content-Type': 'application/json' },
+//              body: JSON.stringify({ message: this.message }),
+//            });
+//            const data = await res.json();
+//            this.reply = data.reply || '⚠️ No response received.';
+//          } catch (error) {
+//            this.reply = '⚠️ Error: ' + error.message;
+//          } finally {
+//            this.loading = false;
+//          }
+//        },
+//        startRecognition() {
+//          if (this.recognition) {
+//            if (!this.recognizing) {
+//              this.recognizing = true;
+//              this.recognition.start();
+//            } else {
+//              this.recognizing = false;
+//              this.recognition.stop();
+//            }
+//          }
+//        },
+//      },
+//    };
 </script>
 
 
