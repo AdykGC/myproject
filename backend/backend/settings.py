@@ -56,6 +56,8 @@ MIDDLEWARE = [
 
 # и настрой CORS
 CORS_ALLOW_ALL_ORIGINS = True  # <-- или CORS_ALLOWED_ORIGINS = [...]
+# for OpenAi contact
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 ROOT_URLCONF = "backend.urls"
 

@@ -1,13 +1,16 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import Header_1 from './components/Header_1.vue'
+import Chat_AI from './components/Chat_AI.vue'
+import Chat from './components/Chat.vue'
 import Items from './components/Items.vue'
-import Header from './components/Header.vue'
 import About from './components/About.vue'
+
 </script>
 
 
 <template>
-  <Header />
+  <Header_1 />
   <div id="app">
     <router-view />
   </div>
@@ -25,7 +28,7 @@ import About from './components/About.vue'
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Header from './components/Header_1.vue'
 
 export default {
   name: 'App',
