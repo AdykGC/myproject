@@ -26,8 +26,14 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG')
 
 
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = [
+    "myproject-pc44.onrender.com",
+    "localhost",
+]
+CORS_ALLOWED_ORIGINS = [
+    "https://myfrontend.onrender.com",
+    "http://localhost:3000",  # если фронт локально
+]
 
 # Application definition
 
@@ -55,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 # и настрой CORS
-CORS_ALLOW_ALL_ORIGINS = True  # <-- или CORS_ALLOWED_ORIGINS = [...]
+
 # for OpenAi contact
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
