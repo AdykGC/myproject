@@ -57,8 +57,8 @@ export default {
   if ('webkitSpeechRecognition' in window) {
     this.recognition = new webkitSpeechRecognition();
     this.recognition.lang = 'ru-RU';
-    this.recognition.continuous = false;
-    this.recognition.interimResults = false;
+    this.recognition.continuous = true;
+    this.recognition.interimResults = true;
 
     this.recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
@@ -67,14 +67,19 @@ export default {
       this.askQuestion(); // автосабмит
     };
 
-    this.recognition.onspeechend = () => {
-      this.recognition.stop();
-      this.recognizing = false;
-    };
+    // this.recognition.onspeechend = () => {
+    //  this.recognition.stop();
+    //  this.recognizing = false;
+    // };
 
     this.recognition.onerror = (event) => {
       console.error('Speech recognition error', event);
       this.recognizing = false;
+      if (event.error === 'no-speech') {
+        alert('🎤 Ничего не услышано. Попробуйте сказать что-то вслух.');
+      } else {
+        alert(`⚠️ Ошибка распознавания: ${event.error}`);
+      }
     };
 
     this.recognition.onend = () => {
