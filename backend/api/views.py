@@ -11,11 +11,11 @@ from rest_framework.response import Response
 import os
 import logging
 import ollama
-import openai
+from openai import OpenAI
 
 
 logger = logging.getLogger(__name__)
-
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
@@ -55,19 +55,20 @@ def openai_message(request):
     Ожидает JSON с ключом 'message'.
     Возвращает ответ модели в формате JSON.
     """
-    openai.api_key = os.getenv("OPENAI_API_KEY") or settings.OPENAI_API_KEY
-
     user_message = request.data.get('message')
     if not user_message:
         return Response({'error': 'Message is required'}, status=400)
+
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",  # можно заменить на gpt-3.5-turbo
-            messages=[{"role": "user", "content": user_message}],
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",  # или "gpt-3.5-turbo"
+            messages=[
+                {"role": "user", "content": user_message}
+            ],
             temperature=0.7,
             max_tokens=1000,
         )
-        reply = response.choices[0].message["content"].strip()
+        reply = response.choices[0].message.content.strip()
         return Response({'reply': reply})
     except Exception as e:
         logger.error(f"OpenAI error: {e}")

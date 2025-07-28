@@ -20,6 +20,13 @@
           </div>
 
           <div class="col left">
+            <label style="color: white; margin-top: 10px;">
+              Choose model:
+              <select v-model="selectedModel" style="margin-left: 10px;">
+                <option value="ollama">🖥️ Ollama (локально)</option>
+                <option value="openai">☁️ OpenAI (через API)</option>
+              </select>
+            </label>
             <button @click="askQuestion" :disabled="loading">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" viewBox="0 0 256 256">
                 <path d="M80,128V64a48,48,0,0,1,96,0v64a48,48,0,0,1-96,0Zm128,0a8,8,0,0,0-16,0,64,64,0,0,1-128,0,8,8,0,0,0-16,0,80.11,80.11,0,0,0,72,79.6V240a8,8,0,0,0,16,0V207.6A80.11,80.11,0,0,0,208,128Z"></path>
@@ -51,6 +58,7 @@ export default {
       loading: false,
       recognizing: false,
       recognition: null,
+      selectedModel: 'ollama', // по умолчанию
     };
   },
   mounted() {
@@ -61,10 +69,18 @@ export default {
     this.recognition.interimResults = true;
 
     this.recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      this.message = transcript;
-      this.recognizing = false;
-      this.askQuestion(); // автосабмит
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      if (finalTranscript.trim() !== '') {
+        this.message = finalTranscript.trim();
+        this.recognizing = false;
+        this.recognition.stop(); // останавливаем распознавание
+        this.askQuestion();      // отправляем только финальный текст
+      }
     };
 
     // this.recognition.onspeechend = () => {
@@ -94,14 +110,17 @@ export default {
       if (!this.message.trim()) return;
 
       this.loading = true;
-      console.log('📤 Отправляем:', this.message);
+      console.log(`📤 Отправляем (${this.selectedModel}):`, this.message);
+      let url = 'http://localhost:8000/api/chat/ollama/';
+      if (this.selectedModel === 'openai') {
+        url = 'http://localhost:8000/api/chat/openai/';
+      }
       try {
-        const res = await fetch('http://localhost:8000/api/chat/ollama/', {
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: this.message }),
         });
-
         const data = await res.json();
         this.reply = data.reply || '⚠️ No response received.';
       } catch (error) {
