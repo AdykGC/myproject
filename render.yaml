@@ -1,9 +1,12 @@
 services:
   - type: web
     name: django-backend
-    env: docker
+    env: python
     plan: free
-    dockerfilePath: Dockerfile
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: gunicorn backend.backend.wsgi:application
     envVars:
       - key: DJANGO_SECRET_KEY
         sync: false
@@ -11,5 +14,17 @@ services:
         value: False
       - key: OPENAI_API_KEY
         sync: false
-      - key: DJANGO_SETTINGS_MODULE
-        value: backend.backend.settings
+    autoDeploy: true
+
+  - type: web
+    name: vue-frontend
+    env: node
+    plan: free
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
